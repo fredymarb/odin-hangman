@@ -1,9 +1,13 @@
+require "yaml"
 require_relative "word"
 require_relative "player"
+require "rubocop"
+require "rubocop-performance"
 
 class Game
   attr_reader :game_word
   attr_accessor :correct_guesses, :wrong_guesses
+
   def initialize
     # intitalize other classes
     @word_class = Word.new
@@ -14,18 +18,61 @@ class Game
     @correct_guesses = @word_class.correct_guesses
     @wrong_guesses = @word_class.wrong_guesses
     @lives_left = 10
+  end
 
+  def play
+    answer = @player_class.play_or_load
+    if answer == "0"
+      play_round
+    else
+      load_previous_game
+    end
+  end
+
+  def load_previous_game
+    puts "Ability to play saved previous game comming soon"
   end
 
   def play_round
+    quit_options = %w[quit exit]
+    confirm_yes = %w[y yes]
+    confirm_no = %w[n no]
+
     loop do
       answer = @player_class.player_input
+
+      if quit_options.include?(answer)
+        confirm_quit = @player_class.confirm_quit
+        if confirm_yes.include?(confirm_quit)
+          # NOTE: outputs a yaml string of the game for now
+          # instead of saving it to a file
+          puts to_yaml
+          break
+        elsif confirm_no.include?(confirm_quit)
+          puts "resuming game...\n "
+          redo
+        end
+      end
 
       update_game(answer)
       update_game_text
 
       return game_over_text if game_over?
     end
+  end
+
+  def to_yaml
+    YAML.dump({
+                game_word: @game_word,
+                correct_guesses: @correct_guesses,
+                wrong_guesses: @wrong_guesses,
+                lives_left: @lives_left
+              })
+  end
+
+  def self.from_yaml(string)
+    data = YAML.load(string)
+    new(data[:game_word], data[:correct_guesses], data[:wrong_guesses], data[:lives_left])
   end
 
   private
@@ -35,7 +82,7 @@ class Game
   end
 
   def update_game_text
-    puts "#{@correct_guesses.join}"
+    puts @correct_guesses.join
     puts "Wrong guesses: #{@wrong_guesses.inspect}"
     puts "Lives left: #{@lives_left}\n "
   end
@@ -66,4 +113,4 @@ class Game
 end
 
 game = Game.new
-puts game.play_round
+puts game.play

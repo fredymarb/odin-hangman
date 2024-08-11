@@ -1,6 +1,6 @@
 class Player
   def player_input
-    response = nil
+    confirm_options = %w[quit exit]
 
     loop do
       print "Enter a letter: "
@@ -8,21 +8,37 @@ class Player
       response.downcase!
 
       return response if response.match?(/[a-z]/) && response.length == 1
+      return response if confirm_options.include?(response)
 
       puts "Enter a single letter(a-z)\n "
     end
   end
 
   def play_or_load
-    response = nil
+    confirm_options = %w[0 1]
+
     loop do
       puts "[0]: play new game"
       puts "[1]: load saved game"
-      response = self.ask_input
+      response = ask_input
 
-      return response if response == "0" || response == "1"
+      return response if confirm_options.include?(response)
 
       puts "Enter 0 or 1\n "
+    end
+  end
+
+  def confirm_quit
+    confirm_options = %w[y yes n no]
+
+    loop do
+      print "Are you sure you want to exit this game?[Y/n]: "
+      response = ask_input
+      response.downcase!
+
+      return response if confirm_options.include?(response)
+
+      puts "Enter y for yes and n for no\n "
     end
   end
 
