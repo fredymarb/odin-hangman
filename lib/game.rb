@@ -20,23 +20,24 @@ class Game
   def play_round
     loop do
       answer = @player_class.player_input
-      # puts "#{@correct_guesses.join}"
 
-      self.update_game(answer)
+      update_game(answer)
+      update_game_text
 
-      puts "#{@correct_guesses.join}"
-      puts "Wrong guesses: #{@wrong_guesses.inspect}"
-      puts "Lives left: #{@lives_left}\n "
-
-      if self.game_over?
-        self.game_over_text
-        break
-      end
+      return game_over_text if game_over?
     end
   end
 
+  private
+
   def game_over?
     @game_word == @correct_guesses.join || @lives_left.zero?
+  end
+
+  def update_game_text
+    puts "#{@correct_guesses.join}"
+    puts "Wrong guesses: #{@wrong_guesses.inspect}"
+    puts "Lives left: #{@lives_left}\n "
   end
 
   def game_over_text

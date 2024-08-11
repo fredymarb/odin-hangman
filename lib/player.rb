@@ -4,7 +4,7 @@ class Player
 
     loop do
       print "Enter a letter: "
-      response = self.ask_input
+      response = ask_input
       response.downcase!
 
       return response if response.match?(/[a-z]/) && response.length == 1
