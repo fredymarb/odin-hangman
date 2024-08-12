@@ -39,6 +39,7 @@ class Game
       answer = @player_class.player_input
 
       return quit_game if quit_options.include?(answer)
+      return start_new_game if answer == "restart"
 
       update_game(answer)
       update_game_text

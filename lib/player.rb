@@ -1,6 +1,6 @@
 class Player
   def player_input
-    confirm_options = %w[quit exit]
+    confirm_options = %w[quit exit restart]
 
     loop do
       print "Enter a letter: "
