@@ -32,7 +32,7 @@ class Player
     confirm_options = %w[y yes n no]
 
     loop do
-      print "Are you sure you want to exit this game?[Y/n]: "
+      print "Do you want to save game before quiting?[Y/n]: "
       response = ask_input
       response.downcase!
 

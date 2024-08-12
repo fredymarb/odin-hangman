@@ -35,23 +35,13 @@ class Game
 
   def play_round
     quit_options = %w[quit exit]
-    confirm_yes = %w[y yes]
-    confirm_no = %w[n no]
 
     loop do
       answer = @player_class.player_input
 
       if quit_options.include?(answer)
-        confirm_quit = @player_class.confirm_quit
-        if confirm_yes.include?(confirm_quit)
-          # NOTE: outputs a yaml string of the game for now
-          # instead of saving it to a file
-          puts to_yaml
-          break
-        elsif confirm_no.include?(confirm_quit)
-          puts "resuming game...\n "
-          redo
-        end
+        quit_game
+        break
       end
 
       update_game(answer)
@@ -110,7 +100,21 @@ class Game
       @lives_left -= 1
     end
   end
+
+  def quit_game
+    confirm_yes = %w[y yes]
+    confirm_no = %w[n no]
+
+    confirm_quit = @player_class.confirm_quit
+    if confirm_yes.include?(confirm_quit)
+      puts to_yaml
+      puts "Saving game...\n "
+      puts "Quiting game...\n "
+    elsif confirm_no.include?(confirm_quit)
+      puts "Quiting game...\n "
+    end
+  end
 end
 
 game = Game.new
-puts game.play
+game.play
