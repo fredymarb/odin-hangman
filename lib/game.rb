@@ -26,7 +26,6 @@ class Game
       play_round
     else
       load_saved_game
-      clear_saved_game
     end
   end
 
@@ -49,6 +48,12 @@ class Game
 
   def load_saved_game
     play_round unless load_game.nil?
+
+    start_new_game if load_game.nil?
+
+    return unless game_over?
+
+    clear_saved_game
   end
 
   def clear_saved_game
@@ -138,6 +143,15 @@ class Game
     @correct_guesses = unserealized[:correct_guesses]
     @wrong_guesses = unserealized[:wrong_guesses]
     @lives_left = unserealized[:lives_left]
+  end
+
+  def start_new_game
+    confirm_yes = %w[y yes]
+    confirm_no = %w[n no]
+    response = @player_class.confirm_new_game
+
+    play_round if confirm_yes.include?(response)
+    nil if confirm_no.include?(response)
   end
 end
 

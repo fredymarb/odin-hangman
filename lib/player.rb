@@ -14,6 +14,20 @@ class Player
     end
   end
 
+  def confirm_new_game
+    confirm_options = %w[y yes n no]
+
+    loop do
+      puts "Do you want to start new game?[Y/n]"
+      response = ask_input
+      response.downcase!
+
+      return response if confirm_options.include?(response)
+
+      puts "Enter y for yes and n for no\n "
+    end
+  end
+
   def play_or_load
     confirm_options = %w[0 1]
 
