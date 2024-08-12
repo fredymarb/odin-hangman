@@ -18,7 +18,7 @@ class Player
     confirm_options = %w[y yes n no]
 
     loop do
-      puts "Do you want to start new game?[Y/n]"
+      print "Do you want to start new game?[Y/n]: "
       response = ask_input
       response.downcase!
 

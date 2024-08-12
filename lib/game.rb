@@ -42,7 +42,12 @@ class Game
 
       update_game(answer)
       update_game_text
-      return game_over_text if game_over?
+
+      next unless game_over?
+
+      game_over_text
+      start_new_game
+      break
     end
   end
 
@@ -150,7 +155,7 @@ class Game
     confirm_no = %w[n no]
     response = @player_class.confirm_new_game
 
-    play_round if confirm_yes.include?(response)
+    Game.new.play_round if confirm_yes.include?(response)
     nil if confirm_no.include?(response)
   end
 end
