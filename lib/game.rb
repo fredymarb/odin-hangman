@@ -39,15 +39,11 @@ class Game
     loop do
       answer = @player_class.player_input
 
-      if quit_options.include?(answer)
-        quit_game
-        break
-      end
-
       update_game(answer)
       update_game_text
 
       return game_over_text if game_over?
+      return quit_game if quit_options.include?(answer)
     end
   end
 
@@ -108,7 +104,7 @@ class Game
     confirm_quit = @player_class.confirm_quit
     if confirm_yes.include?(confirm_quit)
       puts to_yaml
-      puts "Saving game...\n "
+      puts "Saving game... "
       puts "Quiting game...\n "
     elsif confirm_no.include?(confirm_quit)
       puts "Quiting game...\n "
