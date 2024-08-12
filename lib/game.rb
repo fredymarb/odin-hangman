@@ -1,6 +1,6 @@
-require "yaml"
 require_relative "word"
 require_relative "player"
+require "yaml"
 require "rubocop"
 require "rubocop-performance"
 
@@ -103,12 +103,17 @@ class Game
 
     confirm_quit = @player_class.confirm_quit
     if confirm_yes.include?(confirm_quit)
-      puts to_yaml
-      puts "Saving game... "
+      save_game(to_yaml)
       puts "Quiting game...\n "
     elsif confirm_no.include?(confirm_quit)
       puts "Quiting game...\n "
     end
+  end
+
+  def save_game(string)
+    puts "Saving game... "
+    File.write("save_file.txt", string)
+    puts "Game saved successfully... "
   end
 end
 
