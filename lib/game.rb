@@ -25,26 +25,29 @@ class Game
     if answer == "0"
       play_round
     else
-      load_previous_game
+      load_saved_game
     end
-  end
-
-  def load_previous_game
-    puts "Ability to play saved previous game comming soon"
   end
 
   def play_round
     quit_options = %w[quit exit]
 
+    puts "Word is #{@game_word.length} letters long"
+    update_game_text
+
     loop do
       answer = @player_class.player_input
 
+      return quit_game if quit_options.include?(answer)
+
       update_game(answer)
       update_game_text
-
       return game_over_text if game_over?
-      return quit_game if quit_options.include?(answer)
     end
+  end
+
+  def load_saved_game
+    play_round unless load_game.nil?
   end
 
   def to_yaml
@@ -57,8 +60,7 @@ class Game
   end
 
   def self.from_yaml(string)
-    data = YAML.load(string)
-    new(data[:game_word], data[:correct_guesses], data[:wrong_guesses], data[:lives_left])
+    YAML.load(string)
   end
 
   private
@@ -112,8 +114,25 @@ class Game
 
   def save_game(string)
     puts "Saving game... "
-    File.write("save_file.txt", string)
+    File.write("save_file.yaml", string)
     puts "Game saved successfully... "
+  end
+
+  def load_game
+    puts "loading saved game..."
+    saved_game = File.read("save_file.yaml")
+
+    if File.empty?("save_file.yaml")
+      puts "You don't have any saved game yet."
+      return nil
+    end
+
+    unserealized = Game.from_yaml(saved_game)
+
+    @game_word = unserealized[:game_word]
+    @correct_guesses = unserealized[:correct_guesses]
+    @wrong_guesses = unserealized[:wrong_guesses]
+    @lives_left = unserealized[:lives_left]
   end
 end
 
