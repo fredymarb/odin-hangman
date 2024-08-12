@@ -26,6 +26,7 @@ class Game
       play_round
     else
       load_saved_game
+      clear_saved_game
     end
   end
 
@@ -48,6 +49,10 @@ class Game
 
   def load_saved_game
     play_round unless load_game.nil?
+  end
+
+  def clear_saved_game
+    File.write("save_file.yaml", "")
   end
 
   def to_yaml
